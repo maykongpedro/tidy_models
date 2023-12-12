@@ -5,6 +5,8 @@ libs <- c(
   "tidymodels", # modeling with tidy universe
   "skimr", # alternative to base::summary()
   "GGally", # alternativa graphic
+  "dotwhisker", #generate a dot-and-whisker plot
+  # "equatiomatic" # extract model equation
 )
 
 # checar se todos os pacotes necessários já estão instalados
