@@ -4,7 +4,7 @@
 source(
   here::here(
     "03_scripts",
-    "00_install_packcages"
+    "00_install_packcages.R"
   )
 )
 
