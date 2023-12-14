@@ -9,7 +9,6 @@ source(
 
 
 # Get data ---------------------------------
-
 tempodist <- readr::read_rds(
   here::here(
     "02_data_rds",
@@ -61,12 +60,11 @@ modelo_lm <- especificacao_lm |>
   parsnip::fit(tempo ~ distancia, data = tempodist)
 modelo_lm
 
-
+library(tidymodels)
 # observar os parâmetros do modelo
 modelo_lm_r_base |> summary() # usando r base
 modelo_lm |> parsnip::extract_fit_engine() |> summary() # usando tidymodels
-modelo_lm |> yardstick::tidy() # usando tidymodels (opção 2)
-
+modelo_lm |> broom::tidy() # usando tidymodels (opção 2)
 
 # outras maneiras de observar os parâmetros do modelo (necessita dos dados
 # ajustados pelo R base)
@@ -105,6 +103,73 @@ tempodist_c_previsao <- tempodist |>
 
 
 # gráfico didático para visualizar o conceito de rquadrado
+tempodist_c_previsao |>
+  ggplot2::ggplot(
+    ggplot2::aes(
+      x = distancia,
+      y = tempo
+    )
+  ) +
+  # plotar os pontos
+  ggplot2::geom_point(
+    color = "#39568C",
+    size = 2.5
+  ) +
+  # plotar uma reta teórica
+  ggplot2::geom_smooth(
+    ggplot2::aes(color = "Fitted Values"),
+    method = "lm",
+    formula = y ~ x,
+    se = F,
+    size = 2
+  ) +
+  # adicionar uma linha horizontal no y = 30
+  ggplot2::geom_hline(
+    yintercept = 30,
+    color = "grey50",
+    size = 0.5
+  ) +
+  # adicionar um segmento de reta para representar a diferença entre
+  # o tempo previsto e a média do tempo
+  ggplot2::geom_segment(
+    ggplot2::aes(
+      x = distancia,
+      xend = distancia,
+      y = tempo_previsto,
+      yend = mean(tempo),
+      color = "Yhat - Ymean"
+    ),
+    size = 0.7,
+    linetype = 2
+  ) +
+  # adicionar um segmento de reta para representar a diferença entre
+  # o tempo e o tempo previsto
+  ggplot2::geom_segment(
+    ggplot2::aes(
+      x = distancia,
+      xend = distancia,
+      y = tempo,
+      yend = tempo_previsto,
+      color = "Erro = Y - Yhat"
+    ),
+    size = 0.7,
+    linetype = 3
+  ) +
+  # renomear eixos
+  ggplot2::labs(
+    x = "Distância",
+    y = "Tempo"
+  ) +
+  # estabeler título para a legenda e cores padronizadas
+  ggplot2::scale_color_manual(
+    name = "Legenda",
+    values = c("#55C667FF", "grey50", "#440154FF")
+  ) +
+  # ajustar o tema
+  ggplot2::theme_classic()
+
+
+
 
 
 
