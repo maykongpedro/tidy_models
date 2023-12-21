@@ -6,6 +6,7 @@ libs <- c(
   "skimr", # alternative to base::summary()
   "GGally", # alternativa graphic
   "dotwhisker", #generate a dot-and-whisker plot
+  "patchwork" # plots arrange
   # "equatiomatic" # extract model equation
 )
 
